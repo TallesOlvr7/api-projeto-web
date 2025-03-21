@@ -10,29 +10,12 @@ use Illuminate\Http\Request;
 
 class DespesaController extends Controller
 {
-    public function index(Request $request): JsonResponse
-    {
-        try {
-            $user = $request->user();
-            $despesas = Despesa::where('usu_id', $user->id)->with('categoria')->get();
-
-            return response()->json([
-                'despesas' => $despesas,
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-            ], 400);
-        }
-    }
-
     public function store(DespesaRequest $request): JsonResponse
     {
         try {
             $user = $request->user();
-            $data = $request->all();
-            $data['usu_id'] = $user->id;
+            $data = $request->validated();
+            $data['usu_id'] = $user->usu_id;
 
             $despesa = Despesa::create($data);
 
@@ -48,49 +31,13 @@ class DespesaController extends Controller
         }
     }
 
-    public function update(DespesaRequest $request, $id): JsonResponse
-    {
-        try {
-            $user = $request->user();
-            $despesa = Despesa::where('usu_id', $user->id)->findOrFail($id);
-            $despesa->update($request->only(['des_valor', 'des_descricao', 'des_data', 'cat_id']));
-
-            return response()->json([
-                'message' => 'Despesa atualizada com sucesso',
-                'Despesa' => $despesa,
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-            ], 400);
-        }
-    }
-
-    public function destroy($id, Request $request): JsonResponse
-    {
-        try {
-            $user = $request->user();
-            $despesa = Despesa::where('usu_id', $user->id)->findOrFail($id);
-            $despesa->delete();
-
-            return response()->json([
-                'message' => 'Despesa removida com sucesso',
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-            ], 400);
-        }
-    }
-
     public function relatorio($mes, Request $request): JsonResponse
     {
         try {
             $user = $request->user();
-            $despesas = Despesa::where('usu_id', $user->id)
-                ->whereMonth('des_data', $mes)
+            $despesas = Despesa::where('usu_id', '=',$user->usu_id)
+                ->whereMonth('des_data', '=',$mes)
+                ->with('categoria')
                 ->get();
 
             return response()->json([

@@ -2,24 +2,23 @@
 
 use App\Http\Controllers\Api\CategoriaController;
 use App\Http\Controllers\Api\DespesaController;
+use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\UsuarioController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::post('/usuario', [UsuarioController::class, 'store']);
+Route::post('/login', [LoginController::class, 'login']);
+Route::get('/logout', [LoginController::class, 'logout']);
 
-Route::controller(CategoriaController::class)->group(function(){
-    Route::get('/categoria', 'index');
-    Route::post('/categoria', 'store');
-    Route::delete('/categoria/{categoria}', 'destroy');
-    Route::patch('/categoria/{categoria}', 'update');
-});
+Route::middleware(['auth:sanctum'])->group(function(){
+    Route::controller(CategoriaController::class)->group(function(){
+        Route::get('/categoria', 'index');
+        Route::post('/categoria', 'store');
+    });
 
-Route::controller(DespesaController::class)->group(function(){
-    Route::get('/despesa', 'index'); 
-    Route::post('/despesa', 'store');
-    Route::delete('/despesa/{despesa}', 'destroy');
-    Route::patch('/despesa/{despesa}', 'update'); 
-    Route::get('/despesa/relatorio/{mes}', 'relatorio');
+    Route::controller(DespesaController::class)->group(function(){
+        Route::post('/despesa', 'store');
+        Route::get('/despesa/{mes}', 'relatorio');
+    });
 });
