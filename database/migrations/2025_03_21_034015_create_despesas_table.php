@@ -6,20 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+
     public function up(): void
     {
-        Schema::create('despesas', function (Blueprint $table) {
-            $table->id();
+        Schema::create('des_despesa', function (Blueprint $table) {
+            $table->id( 'des_id');
+            $table->string('des_descricao');
+            $table->unsignedBigInteger('cat_id');
+            $table->decimal('des_valor', 10,2);
+            $table->date('des_data');
             $table->timestamps();
+
+            $table->foreign('cat_id')->references('cat_id')->on('categoria');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+
     public function down(): void
     {
         Schema::dropIfExists('despesas');

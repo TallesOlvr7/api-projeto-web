@@ -6,13 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+
     public function up(): void
     {
-        Schema::create('categorias', function (Blueprint $table) {
-            $table->id();
+        Schema::create('cat_categoria', function (Blueprint $table) {
+            $table->id('cat_id');
+            $table->string('cat_descricao');
             $table->timestamps();
         });
     }
