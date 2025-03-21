@@ -25,4 +25,13 @@ class LoginController extends Controller
             'token'=> $token
         ], 201);
     }
+
+    public function logout(Request $request): JsonResponse
+    {
+        $request->user()->tokens->each(function ($token) {
+            $token->delete();
+        });
+
+        return response()->json(['message' => 'Logout realizado com sucesso.'], 201);
+    }
 }
