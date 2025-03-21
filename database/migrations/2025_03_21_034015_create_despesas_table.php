@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('des_data');
             $table->timestamps();
 
-            $table->foreign('cat_id')->references('cat_id')->on('categoria');
+            $table->foreign('cat_id')->references('cat_id')->on('cat_categoria');
         });
     }
 
