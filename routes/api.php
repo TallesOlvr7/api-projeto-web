@@ -9,6 +9,8 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::controller(CategoriaController::class)->group(function(){
-    Route::get('/categoria', 'index');
+    Route::get('/categoria', 'index'); // Rota para listar todas as categorias
     Route::post('/categoria', 'store');
+    Route::delete('/categoria/{categoria}', 'destroy');
+    Route::patch('/categoria/{categoria}', 'update'); // Rota para atualizar o nome de uma categoria
 });
