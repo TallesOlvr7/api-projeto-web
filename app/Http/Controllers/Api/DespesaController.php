@@ -17,7 +17,12 @@ class DespesaController extends Controller
             $data = $request->validated();
             $data['usu_id'] = $user->usu_id;
 
-            $despesa = Despesa::create($data);
+            $despesa = Despesa::create([
+                'des_descricao'=>$data['des_descricao'],
+                'cat_id'=>$data['cat_id'],
+                'des_valor'=>$data['des_valor'],
+                'des_data'=>$data['des_data'],
+            ]);
 
             return response()->json([
                 'message' => 'Despesa criada com sucesso',
@@ -31,14 +36,10 @@ class DespesaController extends Controller
         }
     }
 
-    public function relatorio($mes, Request $request): JsonResponse
+    public function index(): JsonResponse
     {
         try {
-            $user = $request->user();
-            $despesas = Despesa::where('usu_id', '=',$user->usu_id)
-                ->whereMonth('des_data', '=',$mes)
-                ->with('categoria')
-                ->get();
+            $despesas = Despesa::all()->load('categoria');
 
             return response()->json([
                 'despesas' => $despesas,

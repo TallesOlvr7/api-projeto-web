@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/usuario', [UsuarioController::class, 'store']);
-Route::post('/login', [LoginController::class, 'login']);
-Route::get('/logout', [LoginController::class, 'logout']);
+Route::post('/login', [LoginController::class, 'auth']);
+
 
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::controller(CategoriaController::class)->group(function(){
@@ -19,6 +19,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::controller(DespesaController::class)->group(function(){
         Route::post('/despesa', 'store');
-        Route::get('/despesa/{mes}', 'relatorio');
+        Route::get('/despesas', 'index');
     });
+
+    Route::post('/logout', [LoginController::class, 'logout']);
+    Route::get('/usuario/{email}', [UsuarioController::class, 'usuarioPorEmail']);
 });

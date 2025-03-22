@@ -8,34 +8,30 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Sanctum\HasApiTokens;
 
-class Usuario extends Authenticatable
+class User extends Authenticatable
 {
     use HasApiTokens,HasFactory, Notifiable;
 
-    protected $table = 'usu_usuario';
-    protected $primaryKey = 'usu_id';
-
-
     protected $fillable = [
-        'usu_nome',
-        'usu_email',
-        'usu_senha',
+        'name',
+        'email',
+        'password',
     ];
 
 
     protected $hidden = [
-        'usu_senha',
+        'password',
         'remember_token',
     ];
 
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'usu_senha' => 'hashed',
+        'password' => 'hashed',
     ];
 
     public function despesas(): HasMany
     {
-        return $this->hasMany(Despesa::class, 'usu_id', 'usu_id');
+        return $this->hasMany(Despesa::class, 'usu_id', 'id');
     }
 }

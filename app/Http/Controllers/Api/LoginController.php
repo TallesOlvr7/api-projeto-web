@@ -11,15 +11,17 @@ use function _PHPStan_781aefaf6\React\Promise\all;
 
 class LoginController extends Controller
 {
-    public function login(LoginRequest $request):JsonResponse
+    public function auth(LoginRequest $request):JsonResponse
     {
-        if(!Auth::attempt($request->validated())){
+        if (!Auth::attempt($request->validated())) {
+            dd('Autenticação falhou');
             return response()->json([
-                'error'=>'Email ou senha inválidos',
+                'error' => 'Email ou senha inválidos',
             ], 400);
         }
 
-        $token = $request->user()->createToken('user-token')->plainTextToken;
+        $token = Auth::user()->createToken('user-token')->plainTextToken;
+
         return response()->json([
             'message'=>'Usuário logado com sucesso',
             'token'=> $token
@@ -28,10 +30,14 @@ class LoginController extends Controller
 
     public function logout(Request $request): JsonResponse
     {
-        $request->user()->tokens->each(function ($token) {
-            $token->delete();
-        });
 
-        return response()->json(['message' => 'Logout realizado com sucesso.'], 201);
+        if (!$request->user()) {
+            return response()->json(['error' => 'Não autenticado'], 401);
+        }
+
+
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json(['message' => 'Logout realizado com sucesso'], 200);
     }
 }

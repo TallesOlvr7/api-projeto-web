@@ -17,7 +17,7 @@ class DespesaRequest extends FormRequest
             'des_valor' => 'required|numeric',
             'des_descricao' => 'required|string|max:255',
             'des_data' => 'required|date',
-            'cat_id' => 'required|exists:categorias,id',
+            'cat_id' => 'required',
         ];
     }
 

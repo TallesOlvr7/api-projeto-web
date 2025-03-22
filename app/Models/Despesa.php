@@ -28,7 +28,7 @@ class Despesa extends Model
 
     public function usuario(): BelongsTo
     {
-        return $this->belongsTo(Usuario::class, 'usu_id', 'usu_id');
+        return $this->belongsTo(User::class, 'usu_id', 'id');
     }
 }
 
